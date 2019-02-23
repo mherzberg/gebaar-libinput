@@ -99,8 +99,8 @@ void gebaar::io::Input::handle_swipe_event_without_coords(libinput_event_gesture
 {
     if (begin) {
         gesture_swipe_event.fingers = libinput_event_gesture_get_finger_count(gev);
-    }
-    else {
+        has_received_updates = false;
+    } else {
         double x = gesture_swipe_event.x;
         double y = gesture_swipe_event.y;
 
@@ -120,8 +120,12 @@ void gebaar::io::Input::handle_swipe_event_without_coords(libinput_event_gesture
  */
 void gebaar::io::Input::handle_swipe_event_with_coords(libinput_event_gesture* gev)
 {
-    gesture_swipe_event.x += libinput_event_gesture_get_dx(gev);
-    gesture_swipe_event.y += libinput_event_gesture_get_dy(gev);
+    if (has_received_updates) {
+        gesture_swipe_event.x += libinput_event_gesture_get_dx(gev);
+        gesture_swipe_event.y += libinput_event_gesture_get_dy(gev);
+    } else {
+        has_received_updates = true;
+    }
 }
 
 /**
