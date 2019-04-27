@@ -19,6 +19,7 @@
 
 #include <zconf.h>
 #include "config.h"
+#include "../util.h"
 
 /**
  * Check if config file exists at current path
@@ -36,8 +37,12 @@ void gebaar::config::Config::load_config()
 {
     if (find_config_file()) {
         if (config_file_exists()) {
-            config = cpptoml::parse_file(std::filesystem::path(config_file_path));
-
+            try {
+                config = cpptoml::parse_file(std::filesystem::path(config_file_path));
+            } catch (const cpptoml::parse_exception& e) {
+                std::cerr << e.what() << std::endl;
+                exit(EXIT_FAILURE);
+            }
             swipe_three_commands[1] = *config->get_qualified_as<std::string>("commands.swipe.three.left_up");
             swipe_three_commands[2] = *config->get_qualified_as<std::string>("commands.swipe.three.up");
             swipe_three_commands[3] = *config->get_qualified_as<std::string>("commands.swipe.three.right_up");
@@ -68,17 +73,21 @@ void gebaar::config::Config::load_config()
  */
 bool gebaar::config::Config::find_config_file()
 {
-    const char* temp_path;
-    temp_path = getenv("XDG_CONFIG_HOME");
-    if (temp_path==nullptr) {
-        temp_path = getenv("HOME");
-        if (temp_path==nullptr) {
+    std::string temp_path = gebaar::util::stringFromCharArray(getenv("XDG_CONFIG_HOME"));
+    if (temp_path.empty()) {
+        // first get the path to HOME
+        temp_path = gebaar::util::stringFromCharArray(getenv("HOME"));
+        if (temp_path.empty()) {
             temp_path = getpwuid(getuid())->pw_dir;
         }
+        // then append .config
+        if (!temp_path.empty()) {
+            temp_path.append("/.config");
+        }
     }
-    if (temp_path!=nullptr) {
+    if (!temp_path.empty()) {
         config_file_path = temp_path;
-        config_file_path.append("/.config/gebaar/gebaard.toml");
+        config_file_path.append("/gebaar/gebaard.toml");
         return true;
     }
     return false;

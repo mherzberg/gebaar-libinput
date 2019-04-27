@@ -1,6 +1,5 @@
 Gebaar
 =========
-[![](https://img.shields.io/gitter/room/gebaar-libinput/community.svg?style=flat)](https://gitter.im/gebaar-libinput/community)
 
 WM Independent Touchpad Gesture Daemon for libinput
 
@@ -15,11 +14,14 @@ Run any command by simply gesturing on your touchpad!
 Gebaar directly interfaces with libinput to receive and react to the events.   
 This is more stable, faster, and more efficient as it **does not parse the output of a program** like the aforementioned projects do.
 
+### Getting support (or talking about the project's future)
+
+Click to join: [![Discord](https://img.shields.io/discord/548978799136473106.svg?label=Discord)](https://discord.gg/9mbKhFR)
 
 ### How to build and install
 
 1. Clone the repository via `git clone https://github.com/Coffee2CodeNL/gebaar-libinput`
-2. Check out the latest version (`git checkout v0.0.4`)
+2. Check out the latest version (`git checkout v0.0.5`)
 3. Run `git submodule update --init` in the root folder
 4. Run `mkdir build && cd build`
 5. Run `cmake ..`
@@ -35,13 +37,21 @@ This is more stable, faster, and more efficient as it **does not parse the outpu
 
 ```toml
 [commands.swipe.three]
+left_up = ""
+right_up = ""
 up = ""
+left_down = ""
+right_down = ""
 down = ""
 left = ""
 right = ""
 
 [commands.swipe.four]
+left_up = ""
+right_up = ""
 up = ""
+left_down = ""
+right_down = ""
 down = ""
 left = ""
 right = ""
@@ -58,13 +68,21 @@ right = ""
 _~/.config/gebaar/gebaard.toml_
 ```toml
 [commands.swipe.three]
+left_up = ""
+right_up = ""
 up = "bspc node -f north"
+left_down = ""
+right_down = ""
 down = "bspc node -f south"
 left = "bspc node -f west"
 right = "bspc node -f east"
 
 [commands.swipe.four]
+left_up = ""
+right_up = ""
 up = "rofi -show combi"
+left_down = ""
+right_down = ""
 down = ""
 left = "bspc desktop -f prev"
 right = "bspc desktop -f next"
